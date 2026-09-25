@@ -20,6 +20,21 @@ import {
 
 // Official GenLayer Network Configurations
 export const GENLAYER_NETWORKS = {
+  studionet: {
+    id: 'studionet',
+    chainId: '0xf22f', // 61999 in hex
+    chainIdDecimal: 61999,
+    chainName: 'Genlayer Studio Network',
+    nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
+    rpcUrls: ['https://studio.genlayer.com/api'],
+    blockExplorerUrls: ['https://genlayer-explorer.vercel.app/'],
+    consensusContract: '0x82F000000000000000000000000000000000FF38',
+    roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
+    feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
+    deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
+    faucet: 'https://studio.genlayer.com',
+    type: 'GenLayer Studio Network'
+  },
   bradbury: {
     id: 'bradbury',
     chainId: '0x107d', // 4221 in hex
@@ -34,25 +49,11 @@ export const GENLAYER_NETWORKS = {
     deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
     faucet: 'https://testnet-faucet.genlayer.foundation',
     type: 'Production Testnet'
-  },
-  studionet: {
-    id: 'studionet',
-    chainId: '0xf22d', // 61997 in hex
-    chainIdDecimal: 61997,
-    chainName: 'GenLayer Studio Devnet',
-    nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
-    rpcUrls: ['https://studio-rpc.genlayer.com'],
-    blockExplorerUrls: ['https://studio.genlayer.com'],
-    consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
-    roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
-    feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
-    deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
-    faucet: 'https://studio.genlayer.com',
-    type: 'Studio Sandbox'
   }
 };
 
-export const GENLAYER_CHAIN_CONFIG = GENLAYER_NETWORKS.bradbury;
+// Default to GenLayer Studio Network (Matching Shamim's accepted project configuration)
+export const GENLAYER_CHAIN_CONFIG = GENLAYER_NETWORKS.studionet;
 
 declare global {
   interface Window {
