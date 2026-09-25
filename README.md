@@ -4,6 +4,7 @@
 > *Trustless dispute adjudication powered by GenLayer Intelligent Contracts, native web rendering, and decentralized AI validator consensus.*
 
 [![GenLayer Bradbury](https://img.shields.io/badge/Network-GenLayer%20Bradbury%20Testnet-blue.svg)](https://genlayer.com)
+[![Live Demo](https://img.shields.io/badge/Live%20DApp-genhub--ai.vercel.app-emerald.svg)](https://genhub-ai.vercel.app)
 [![GenVM](https://img.shields.io/badge/Execution-GenVM%20Python-3776AB.svg)](https://studio.genlayer.com)
 [![Consensus](https://img.shields.io/badge/Consensus-Optimistic%20Democracy-9333ea.svg)](https://genlayer.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -90,7 +91,7 @@ EscrowGuard AI/
 
 ```bash
 # Clone the repository
-git clone https://github.com/CodeWithShamim/EscrowGuard-AI.git
+git clone https://github.com/MeniyaAnil/EscrowGuard-AI.git
 cd "EscrowGuard AI"
 
 # Install dependencies

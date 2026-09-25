@@ -240,7 +240,7 @@ export default function App() {
                 Inspect AI Validator Jury
               </button>
               <a
-                href="https://github.com/CodeWithShamim/BrickProof"
+                href="https://github.com/MeniyaAnil/EscrowGuard-AI"
                 target="_blank"
                 rel="noreferrer"
                 className="px-4 py-2.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 text-slate-400 hover:text-slate-200 text-xs sm:text-sm flex items-center gap-1.5 transition-all"
