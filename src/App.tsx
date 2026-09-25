@@ -542,7 +542,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-teal-300 bg-clip-text text-transparent">
-                  EscrowGuard AI
+                  GenHub AI
                 </span>
                 <span className="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
                   GenVM Python
@@ -1293,7 +1293,7 @@ export default function App() {
             <pre className="p-4 rounded-xl bg-[#080b12] border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed max-h-[500px]">
 {`from genlayer import *
 
-class EscrowGuard(gl.Contract):
+class GenHubEscrow(gl.Contract):
     escrow_count: int
     escrows: TreeMap[int, dict]
 
@@ -1361,7 +1361,7 @@ class EscrowGuard(gl.Contract):
         <section className="rounded-2xl border border-slate-800 bg-[#0a0d16] p-6 sm:p-8 space-y-5">
           <div className="flex items-center gap-2 text-sm font-semibold text-white">
             <FileCode2 className="w-5 h-5 text-blue-400" />
-            <span>How EscrowGuard AI Uses GenLayer’s Unique Architecture</span>
+            <span>How GenHub AI Uses GenLayer’s Unique Architecture</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
@@ -1392,7 +1392,7 @@ class EscrowGuard(gl.Contract):
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-[#07090e] py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 EscrowGuard AI. Built for the GenLayer Ecosystem & Builder Track.</p>
+          <p>© 2026 GenHub AI. Built for the GenLayer Ecosystem & Builder Track.</p>
           <div className="flex items-center gap-4 text-slate-400">
             <a href="https://genlayer.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
               GenLayer Official

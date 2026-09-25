@@ -1,4 +1,4 @@
-# 🛡️ EscrowGuard AI
+# 🛡️ GenHub AI
 
 > **Autonomous Freelance Milestone & Deliverable Escrow on GenLayer**  
 > *Trustless dispute adjudication powered by GenLayer Intelligent Contracts, native web rendering, and decentralized AI validator consensus.*
@@ -15,7 +15,7 @@
 
 Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and opaque centralized support staff to resolve milestone disputes. Web3 smart contracts on standard EVM chains cannot natively read the internet or evaluate non-deterministic deliverables like source code, documentation, or deployed applications.
 
-**EscrowGuard AI** solves this by leveraging **GenLayer's Intelligent Contracts**. Clients lock escrow funds with plain-English acceptance criteria. When the freelancer delivers the work, GenLayer's AI validator jury:
+**GenHub AI** solves this by leveraging **GenLayer's Intelligent Contracts**. Clients lock escrow funds with plain-English acceptance criteria. When the freelancer delivers the work, GenLayer's AI validator jury:
 1. Directly inspects the deliverable URL (GitHub PR, commit, live demo) using `gl.nondet.web.render()`.
 2. Evaluates compliance against contractual criteria using `gl.nondet.exec_prompt()`.
 3. Reaches consensus across independent LLM nodes via the **Equivalence Principle**.
@@ -29,7 +29,7 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 sequenceDiagram
     autonumber
     actor Client as 👤 Client
-    participant Contract as 📜 EscrowGuard Intelligent Contract
+    participant Contract as 📜 GenHub Intelligent Contract
     actor Freelancer as 💻 Freelancer
     participant GenLayerWeb as 🌐 GenLayer Native Web (gl.nondet.web)
     participant Jury as 🧠 5 AI Validator Nodes (gl.nondet.exec_prompt)
@@ -69,7 +69,7 @@ sequenceDiagram
 ## 📂 Repository Structure
 
 ```
-EscrowGuard AI/
+GenHub AI/
 ├── contracts/
 │   ├── escrow_guard.py     # Production GenLayer Python Intelligent Contract
 │   └── README.md           # Contract deployment & testing documentation
@@ -107,7 +107,7 @@ npm run dev
 2. Connect your wallet to the **GenLayer Bradbury Testnet**.
 3. Create a new file in Studio named `escrow_guard.py`.
 4. Copy and paste the contents from [`contracts/escrow_guard.py`](./contracts/escrow_guard.py).
-5. In the **Run & Debug** tab, select `EscrowGuard` and click **Deploy**.
+5. In the **Run & Debug** tab, select `GenHubEscrow` and click **Deploy**.
 6. Interact with `create_escrow`, `submit_delivery`, and `adjudicate_escrow` directly in the Studio simulator.
 
 ---

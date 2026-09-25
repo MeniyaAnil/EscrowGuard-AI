@@ -1,5 +1,5 @@
 # ==============================================================================
-# EscrowGuard AI - Autonomous Milestone & Deliverable Escrow for GenLayer
+# GenHub AI - Autonomous Milestone & Deliverable Escrow for GenLayer
 # Built for GenLayer Bradbury Testnet & GenLayer Studio
 # ==============================================================================
 # This Intelligent Contract leverages GenLayer's unique superpowers:
@@ -10,14 +10,14 @@
 
 from genlayer import *
 
-class EscrowGuard(gl.Contract):
+class GenHubEscrow(gl.Contract):
     # State storage
     escrow_count: int
     escrows: TreeMap[int, dict]
     platform_admin: Address
 
     def __init__(self):
-        """Initializes the EscrowGuard contract."""
+        """Initializes the GenHubEscrow contract."""
         self.escrow_count = 0
         self.escrows = TreeMap()
         self.platform_admin = gl.message.sender_address

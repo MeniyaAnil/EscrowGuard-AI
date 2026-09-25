@@ -1,6 +1,6 @@
-# EscrowGuard AI - Intelligent Contracts
+# GenHub AI - Intelligent Contracts
 
-This directory contains the Python Intelligent Contract for **EscrowGuard AI**, designed to run on the **GenLayer Bradbury Testnet** and **GenLayer Studio**.
+This directory contains the Python Intelligent Contract for **GenHub AI**, designed to run on the **GenLayer Bradbury Testnet** and **GenLayer Studio**.
 
 ## Contract Overview
 `escrow_guard.py` implements a trustless, decentralized milestone escrow protocol that replaces centralized dispute platforms (like Upwork or Fiverr dispute teams) with GenLayer's decentralized AI validator jury.
