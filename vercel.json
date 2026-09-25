@@ -1,5 +1,4 @@
 {
-  "name": "genhub-ai",
   "framework": "vite",
   "rewrites": [
     {
