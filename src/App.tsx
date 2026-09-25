@@ -232,34 +232,42 @@ export default function App() {
     }
   };
 
-  // Switch / Add GenLayer Bradbury Testnet to MetaMask
+  // Switch / Add GenLayer Network to Rabby / MetaMask
   const switchToGenLayer = async () => {
-    if (!window.ethereum) return;
+    if (!window.ethereum) {
+      alert('MetaMask or Rabby Wallet not detected! Please install a Web3 wallet.');
+      return;
+    }
+
     try {
+      // 1. Try to switch first
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: GENLAYER_CHAIN_CONFIG.chainId }],
       });
+      const currentChainHex = await window.ethereum.request({ method: 'eth_chainId' });
+      setChainId(parseInt(currentChainHex, 16));
     } catch (switchError: any) {
-      // 4902 means the chain has not been added to MetaMask yet
-      if (switchError.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [
-              {
-                chainId: GENLAYER_CHAIN_CONFIG.chainId,
-                chainName: GENLAYER_CHAIN_CONFIG.chainName,
-                nativeCurrency: GENLAYER_CHAIN_CONFIG.nativeCurrency,
-                rpcUrls: GENLAYER_CHAIN_CONFIG.rpcUrls,
-                blockExplorerUrls: GENLAYER_CHAIN_CONFIG.blockExplorerUrls,
-              },
-            ],
-          });
-          setChainId(GENLAYER_CHAIN_CONFIG.chainIdDecimal);
-        } catch (addError) {
-          console.error('Failed to add GenLayer network:', addError);
-        }
+      console.log('Switch failed, attempting to add network directly...', switchError);
+      // 2. Unconditionally attempt to add the chain in Rabby / MetaMask
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: GENLAYER_CHAIN_CONFIG.chainId,
+              chainName: GENLAYER_CHAIN_CONFIG.chainName,
+              nativeCurrency: GENLAYER_CHAIN_CONFIG.nativeCurrency,
+              rpcUrls: GENLAYER_CHAIN_CONFIG.rpcUrls,
+              blockExplorerUrls: GENLAYER_CHAIN_CONFIG.blockExplorerUrls,
+            },
+          ],
+        });
+        const currentChainHex = await window.ethereum.request({ method: 'eth_chainId' });
+        setChainId(parseInt(currentChainHex, 16));
+      } catch (addError: any) {
+        console.error('Failed to add GenLayer network:', addError);
+        alert(`Network switch rejected or failed: ${addError?.message || 'Check wallet popup'}`);
       }
     }
   };
@@ -480,16 +488,16 @@ export default function App() {
         
         {/* Network Warning if not on 4221 */}
         {account && !isCorrectNetwork && (
-          <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 flex items-center justify-between gap-4 text-xs text-amber-200">
+          <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-amber-200">
             <div className="flex items-center gap-2.5">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>Your wallet is connected to Chain ID {chainId}. Please switch to <strong>GenLayer Bradbury Testnet (4221)</strong> to interact with the Intelligent Contract.</span>
+              <span>Your wallet is connected to Chain ID {chainId}. Please switch to <strong>{GENLAYER_CHAIN_CONFIG.chainName} ({GENLAYER_CHAIN_CONFIG.chainIdDecimal})</strong> before sending transactions.</span>
             </div>
             <button
               onClick={switchToGenLayer}
-              className="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold shrink-0 cursor-pointer transition-all"
+              className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold shrink-0 cursor-pointer shadow-md transition-all"
             >
-              Switch to Bradbury
+              Switch to {GENLAYER_CHAIN_CONFIG.chainName.replace('Genlayer ', '').replace('GenLayer ', '')}
             </button>
           </div>
         )}
