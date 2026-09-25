@@ -18,23 +18,41 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-// Official GenLayer Bradbury Testnet Parameters
-export const GENLAYER_CHAIN_CONFIG = {
-  chainId: '0x107d', // 4221 in hex
-  chainIdDecimal: 4221,
-  chainName: 'GenLayer Bradbury Testnet',
-  nativeCurrency: {
-    name: 'GEN Token',
-    symbol: 'GEN',
-    decimals: 18,
+// Official GenLayer Network Configurations
+export const GENLAYER_NETWORKS = {
+  bradbury: {
+    id: 'bradbury',
+    chainId: '0x107d', // 4221 in hex
+    chainIdDecimal: 4221,
+    chainName: 'GenLayer Bradbury Testnet',
+    nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
+    rpcUrls: ['https://rpc-bradbury.genlayer.com'],
+    blockExplorerUrls: ['https://explorer-bradbury.genlayer.com/'],
+    consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
+    roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
+    feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
+    deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
+    faucet: 'https://testnet-faucet.genlayer.foundation',
+    type: 'Production Testnet'
   },
-  rpcUrls: ['https://rpc-bradbury.genlayer.com'],
-  blockExplorerUrls: ['https://explorer-bradbury.genlayer.com/'],
-  consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
-  roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
-  feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
-  deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42'
+  studionet: {
+    id: 'studionet',
+    chainId: '0xf22d', // 61997 in hex
+    chainIdDecimal: 61997,
+    chainName: 'GenLayer Studio Devnet',
+    nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
+    rpcUrls: ['https://studio-rpc.genlayer.com'],
+    blockExplorerUrls: ['https://studio.genlayer.com'],
+    consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
+    roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
+    feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
+    deployedEscrowContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
+    faucet: 'https://studio.genlayer.com',
+    type: 'Studio Sandbox'
+  }
 };
+
+export const GENLAYER_CHAIN_CONFIG = GENLAYER_NETWORKS.bradbury;
 
 declare global {
   interface Window {
