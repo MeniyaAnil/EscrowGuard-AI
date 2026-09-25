@@ -27,7 +27,7 @@ export const GENLAYER_NETWORKS = {
     chainName: 'Genlayer Studio Network',
     nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
     rpcUrls: ['https://studio.genlayer.com/api'],
-    blockExplorerUrls: ['https://explorer-bradbury.genlayer.com/'],
+    blockExplorerUrls: ['https://explorer-studio.genlayer.com/'],
     consensusContract: '0x82F000000000000000000000000000000000FF38',
     roundsStorageContract: '0x7134D05af13A14c0b66Fe129fb930b1d0C420e33',
     feeManagerContract: '0xF205868bf5db79d2162843742D18D0900A9E462a',
