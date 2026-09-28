@@ -34,8 +34,8 @@ sequenceDiagram
     participant GenLayerWeb as 🌐 GenLayer Native Web (gl.nondet.web)
     participant Jury as 🧠 5 AI Validator Nodes (gl.nondet.exec_prompt)
 
-    Client->>Contract: create_escrow(freelancer, title, criteria, amount_gen)
-    Note over Contract: Funds Staked & Locked on-chain
+    Client->>Contract: create_escrow(freelancer, title, criteria) [@gl.public.write.payable with msg.value]
+    Note over Contract: Real GEN Funds Locked in Contract Balance
     Freelancer->>Contract: submit_delivery(escrow_id, pr_url, notes)
     Note over Contract: Status: SUBMITTED
     Contract->>GenLayerWeb: Fetch live evidence from PR / URL
@@ -44,11 +44,11 @@ sequenceDiagram
     Note over Jury: 5 Independent LLMs vote (Claude, Llama, Mistral, GPT, DeepSeek)
     Jury-->>Contract: Optimistic Consensus (Score >= 60)
     alt Approved by Consensus
-        Contract->>Freelancer: Auto-transfer Staked GEN Tokens
-        Note over Contract: Status: RELEASED
+        Contract->>Freelancer: _Recipient(freelancer).emit_transfer(value=amount)
+        Note over Contract: Status: RELEASED (Native Payout)
     else Rejected by Consensus
-        Contract->>Client: Auto-refund Staked GEN Tokens
-        Note over Contract: Status: REFUNDED
+        Contract->>Client: _Recipient(client).emit_transfer(value=amount)
+        Note over Contract: Status: REFUNDED (Native Refund)
     end
 ```
 

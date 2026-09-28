@@ -3,12 +3,21 @@
 # Built for GenLayer Bradbury Testnet & GenLayer Studio
 # ==============================================================================
 # This Intelligent Contract leverages GenLayer's unique superpowers:
-# 1. Native Web Scraping & Rendering (gl.nondet.web) to inspect live GitHub PRs, websites, and deliverables.
-# 2. Decentralized LLM Juror Consensus (gl.nondet.exec_prompt) running across 5 independent validator nodes.
-# 3. Optimistic Democracy & Equivalence Principle for trustless payout adjudication.
+# 1. Native Value Holding & Transfer: Accepts actual GEN with @gl.public.write.payable
+#    and executes real on-chain transfers to EOAs via _Recipient.emit_transfer().
+# 2. Native Web Proof Inspection: gl.nondet.web.render() to inspect live deliverables.
+# 3. Decentralized AI Consensus: gl.nondet.exec_prompt() across 5 validator nodes.
 # ==============================================================================
 
 from genlayer import *
+
+# Interface for external GEN transfers to EOAs or EVM contracts on GenLayer Chain
+@gl.evm.contract_interface
+class _Recipient:
+    class View:
+        pass
+    class Write:
+        pass
 
 class GenHubEscrow(gl.Contract):
     # State storage
@@ -22,38 +31,43 @@ class GenHubEscrow(gl.Contract):
         self.escrows = TreeMap()
         self.platform_admin = gl.message.sender_address
 
-    @gl.public.write
+    @gl.public.write.payable
     def create_escrow(
         self,
-        freelancer: Address,
+        freelancer: str,
         title: str,
-        requirements: str,
-        amount_gen: int
+        requirements: str
     ) -> int:
         """
         Creates a new staked escrow agreement.
-        The client locks funds and specifies plain-English acceptance criteria.
+        The client locks actual GEN funds attached to the transaction (gl.message.value).
         """
-        assert amount_gen > 0, "Escrow deposit amount must be greater than 0"
+        deposit_amount = gl.message.value
+        if deposit_amount == u256(0):
+            raise gl.vm.UserError("Escrow creation requires staked GEN (gl.message.value must be > 0)")
+
         assert len(title) > 0, "Title cannot be empty"
         assert len(requirements) >= 20, "Requirements must be detailed (min 20 characters)"
 
         self.escrow_count += 1
         new_id = self.escrow_count
 
+        freelancer_addr = Address(freelancer)
+
         escrow_data = {
             "id": new_id,
-            "client": gl.message.sender_address,
-            "freelancer": freelancer,
+            "client": str(gl.message.sender_address),
+            "freelancer": str(freelancer_addr),
             "title": title,
             "requirements": requirements,
-            "amount_gen": amount_gen,
-            "status": "FUNDED",  # CREATED, FUNDED, SUBMITTED, ADJUDICATING, RELEASED, REFUNDED
+            "amount_wei": str(deposit_amount),
+            "amount_gen": str(int(deposit_amount) / 10**18),
+            "status": "FUNDED",  # FUNDED, SUBMITTED, RELEASED, REFUNDED
             "delivery_url": "",
             "delivery_notes": "",
             "verdict": "",
             "verdict_score": 0,
-            "adjudicated_at": 0
+            "created_at": str(gl.message.sender_address)
         }
 
         self.escrows[new_id] = escrow_data
@@ -72,7 +86,7 @@ class GenHubEscrow(gl.Contract):
         assert escrow_id in self.escrows, "Escrow not found"
         escrow = self.escrows[escrow_id]
 
-        assert gl.message.sender_address == escrow["freelancer"], "Only the designated freelancer can submit deliverables"
+        assert str(gl.message.sender_address).lower() == escrow["freelancer"].lower(), "Only the designated freelancer can submit deliverables"
         assert escrow["status"] == "FUNDED", "Escrow is not in FUNDED state"
         assert delivery_url.startswith("http://") or delivery_url.startswith("https://"), "Invalid URL scheme"
 
@@ -87,22 +101,27 @@ class GenHubEscrow(gl.Contract):
         Triggers GenLayer's decentralized AI validator jury.
         Validators fetch the live web content via gl.nondet.web and evaluate
         compliance against requirements via gl.nondet.exec_prompt.
+        Upon consensus, native GEN funds are transferred to freelancer or refunded to client.
         """
         assert escrow_id in self.escrows, "Escrow not found"
         escrow = self.escrows[escrow_id]
 
-        assert escrow["status"] in ["SUBMITTED", "DISPUTED"], "Escrow is not ready for adjudication"
+        assert escrow["status"] in ["SUBMITTED", "FUNDED"], "Escrow is not ready for adjudication"
 
         delivery_url = escrow["delivery_url"]
         requirements = escrow["requirements"]
         notes = escrow["delivery_notes"]
+        escrow_amount = u256(int(escrow["amount_wei"]))
 
         # 1. Fetch live deliverable proof directly on-chain using GenLayer web access
         web_evidence = ""
-        try:
-            web_evidence = gl.nondet.web.render(delivery_url, mode="text")
-        except Exception:
-            web_evidence = f"Unable to fetch URL {delivery_url} directly. Evaluating based on submission notes."
+        if delivery_url:
+            try:
+                web_evidence = gl.nondet.web.render(delivery_url, mode="text")
+            except Exception:
+                web_evidence = f"Unable to fetch URL {delivery_url} directly. Evaluating based on submission notes."
+        else:
+            web_evidence = f"No URL provided. Evaluating based on submission notes: {notes}"
 
         # Truncate evidence to fit LLM validator context safely
         trimmed_evidence = web_evidence[:3000]
@@ -139,13 +158,17 @@ class GenHubEscrow(gl.Contract):
         score = evaluation.get("score", 0)
         reasoning = evaluation.get("reasoning", "Adjudication completed.")
 
-        # 3. Automated fund distribution based on AI jury consensus
+        # 3. Real On-Chain Native GEN Transfer / Refund
         if approved and score >= 60:
             escrow["status"] = "RELEASED"
             escrow["verdict"] = f"Approved ({score}/100): {reasoning}"
+            # Transfer held escrow funds to freelancer
+            _Recipient(Address(escrow["freelancer"])).emit_transfer(value=escrow_amount)
         else:
             escrow["status"] = "REFUNDED"
             escrow["verdict"] = f"Rejected ({score}/100): {reasoning}"
+            # Refund held escrow funds to client
+            _Recipient(Address(escrow["client"])).emit_transfer(value=escrow_amount)
 
         escrow["verdict_score"] = score
         self.escrows[escrow_id] = escrow
@@ -157,6 +180,35 @@ class GenHubEscrow(gl.Contract):
             "verdict": escrow["verdict"]
         }
 
+    @gl.public.write
+    def manual_release(self, escrow_id: int):
+        """Client can directly release held funds to freelancer without AI jury."""
+        assert escrow_id in self.escrows, "Escrow not found"
+        escrow = self.escrows[escrow_id]
+        assert str(gl.message.sender_address).lower() == escrow["client"].lower(), "Only client can release"
+        assert escrow["status"] in ["FUNDED", "SUBMITTED"], "Cannot release in current status"
+
+        escrow_amount = u256(int(escrow["amount_wei"]))
+        escrow["status"] = "RELEASED"
+        escrow["verdict"] = "Manually released by client."
+        self.escrows[escrow_id] = escrow
+        _Recipient(Address(escrow["freelancer"])).emit_transfer(value=escrow_amount)
+
+    @gl.public.write
+    def manual_refund(self, escrow_id: int):
+        """Client or freelancer can refund held funds."""
+        assert escrow_id in self.escrows, "Escrow not found"
+        escrow = self.escrows[escrow_id]
+        caller = str(gl.message.sender_address).lower()
+        assert caller == escrow["client"].lower() or caller == escrow["freelancer"].lower(), "Unauthorized"
+        assert escrow["status"] in ["FUNDED", "SUBMITTED"], "Cannot refund in current status"
+
+        escrow_amount = u256(int(escrow["amount_wei"]))
+        escrow["status"] = "REFUNDED"
+        escrow["verdict"] = "Refunded to client."
+        self.escrows[escrow_id] = escrow
+        _Recipient(Address(escrow["client"])).emit_transfer(value=escrow_amount)
+
     @gl.public.view
     def get_escrow(self, escrow_id: int) -> dict:
         """Returns details for a single escrow."""
@@ -164,6 +216,20 @@ class GenHubEscrow(gl.Contract):
         return self.escrows[escrow_id]
 
     @gl.public.view
+    def get_all_escrows(self) -> list:
+        """Returns all escrows stored in contract."""
+        result = []
+        for i in range(1, self.escrow_count + 1):
+            if i in self.escrows:
+                result.append(self.escrows[i])
+        return result
+
+    @gl.public.view
     def get_escrow_count(self) -> int:
         """Returns total number of created escrows."""
         return self.escrow_count
+
+    @gl.public.view
+    def get_contract_balance(self) -> u256:
+        """Returns current GEN balance held in the contract."""
+        return self.balance
