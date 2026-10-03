@@ -23,6 +23,24 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 
 ---
 
+## 🚀 Live Verified Deployment (GenLayer Studionet)
+
+> **Verified Intelligent Contract Address:**  
+> [`0x2b58A537E2050D27F65DB8803508d05B1D712B75`](https://explorer-studio.genlayer.com/address/0x2b58A537E2050D27F65DB8803508d05B1D712B75)
+
+### 📊 End-to-End On-Chain Transaction Evidence
+
+| Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
+|:--- |:---|:---|:---|:---|:---|
+| 1 | **Contract Deployment** | `0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e) |
+| 2 | **Create Escrow (Deposit 1 GEN)** | `0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d) |
+| 3 | **Submit Delivery (Web Proof)** | `0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315) |
+| 4 | **AI Jury Adjudication & Payout** | `0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b` | `MAJORITY_AGREE` | Status: `RELEASED` (Score 82) | [Inspect](https://explorer-studio.genlayer.com/tx/0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b) |
+
+Full documentation and verification scripts are available in [`contracts/DEPLOYMENTS.md`](./contracts/DEPLOYMENTS.md).
+
+---
+
 ## 🏛️ Architecture & Flow
 
 ```mermaid

@@ -33,7 +33,7 @@ export const GENLAYER_NETWORKS = {
     rpcUrls: ['https://studio.genlayer.com/api'],
     blockExplorerUrls: ['https://explorer-studio.genlayer.com/'],
     consensusContract: '0x82F000000000000000000000000000000000FF38',
-    defaultContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
+    defaultContract: '0x2b58A537E2050D27F65DB8803508d05B1D712B75',
     faucet: 'https://studio.genlayer.com',
     type: 'Studio Network (Builder Track)'
   },
@@ -46,7 +46,7 @@ export const GENLAYER_NETWORKS = {
     rpcUrls: ['https://rpc-bradbury.genlayer.com'],
     blockExplorerUrls: ['https://explorer-bradbury.genlayer.com/'],
     consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
-    defaultContract: '0x4D9A1054C119853EB5369E9b83B38150Af871E42',
+    defaultContract: '0x2b58A537E2050D27F65DB8803508d05B1D712B75',
     faucet: 'https://testnet-faucet.genlayer.foundation',
     type: 'Production Testnet (Validator Track)'
   }
@@ -143,35 +143,72 @@ export default function App() {
 
       // 1. Read all stored escrows from contract
       try {
-        const escrowsResult = await client.readContract({
+        const count = await client.readContract({
           address: contractAddress as `0x${string}`,
-          functionName: 'get_all_escrows',
+          functionName: 'get_escrow_count',
           args: [],
         });
 
-        if (Array.isArray(escrowsResult)) {
-          const parsed: EscrowAgreement[] = escrowsResult.map((item: any) => ({
-            id: Number(item.id || 0),
-            title: String(item.title || 'Untitled Agreement'),
-            client: String(item.client || ''),
-            freelancer: String(item.freelancer || ''),
-            amount_wei: String(item.amount_wei || '0'),
-            amount_gen: String(item.amount_gen || '0'),
-            requirements: String(item.requirements || ''),
-            status: (item.status as any) || 'FUNDED',
-            delivery_url: item.delivery_url ? String(item.delivery_url) : undefined,
-            delivery_notes: item.delivery_notes ? String(item.delivery_notes) : undefined,
-            verdict: item.verdict ? String(item.verdict) : undefined,
-            verdict_score: item.verdict_score !== undefined ? Number(item.verdict_score) : undefined,
-            created_at: item.created_at ? String(item.created_at) : undefined,
-          }));
-          setOnChainEscrows(parsed);
-        } else {
-          setOnChainEscrows([]);
+        const total = Number(count || 0);
+        const parsed: EscrowAgreement[] = [];
+        for (let i = 1; i <= total; i++) {
+          try {
+            const item: any = await client.readContract({
+              address: contractAddress as `0x${string}`,
+              functionName: 'get_escrow',
+              args: [BigInt(i)],
+            });
+            if (item) {
+              const wei = String(item.amount_wei || '0');
+              parsed.push({
+                id: Number(item.id || i),
+                title: String(item.title || 'Untitled Agreement'),
+                client: String(item.client || ''),
+                freelancer: String(item.freelancer || ''),
+                amount_wei: wei,
+                amount_gen: ethers.formatEther(wei),
+                requirements: String(item.requirements || ''),
+                status: (item.status as any) || 'FUNDED',
+                delivery_url: item.delivery_url ? String(item.delivery_url) : undefined,
+                delivery_notes: item.delivery_notes ? String(item.delivery_notes) : undefined,
+                verdict: item.verdict ? String(item.verdict) : undefined,
+                verdict_score: item.verdict_score !== undefined ? Number(item.verdict_score) : undefined,
+                created_at: item.created_at ? String(item.created_at) : undefined,
+              });
+            }
+          } catch (itemErr: any) {
+            console.warn(`Error reading escrow ${i}:`, itemErr.message);
+          }
         }
+        setOnChainEscrows(parsed);
       } catch (err: any) {
-        console.warn('get_all_escrows read error (contract might be newly deployed or empty):', err.message);
-        // If contract not deployed yet at this specific address, inform user clearly
+        console.warn('get_escrow_count read error:', err.message);
+        // Fallback: try get_all_escrows if supported
+        try {
+          const escrowsResult = await client.readContract({
+            address: contractAddress as `0x${string}`,
+            functionName: 'get_all_escrows',
+            args: [],
+          });
+          if (Array.isArray(escrowsResult)) {
+            const parsedFallback: EscrowAgreement[] = escrowsResult.map((item: any) => ({
+              id: Number(item.id || 0),
+              title: String(item.title || 'Untitled Agreement'),
+              client: String(item.client || ''),
+              freelancer: String(item.freelancer || ''),
+              amount_wei: String(item.amount_wei || '0'),
+              amount_gen: String(item.amount_gen || ethers.formatEther(item.amount_wei || '0')),
+              requirements: String(item.requirements || ''),
+              status: (item.status as any) || 'FUNDED',
+              delivery_url: item.delivery_url ? String(item.delivery_url) : undefined,
+              delivery_notes: item.delivery_notes ? String(item.delivery_notes) : undefined,
+              verdict: item.verdict ? String(item.verdict) : undefined,
+              verdict_score: item.verdict_score !== undefined ? Number(item.verdict_score) : undefined,
+              created_at: item.created_at ? String(item.created_at) : undefined,
+            }));
+            setOnChainEscrows(parsedFallback);
+          }
+        } catch {}
         if (err.message && err.message.includes('not found')) {
           setContractError(`Contract ${contractAddress.slice(0, 10)}... not found on ${network.chainName}. Deploy it via Studio or update address below.`);
         }
@@ -357,7 +394,7 @@ export default function App() {
       const writeArgs = {
         address: contractAddress as `0x${string}`,
         functionName: 'submit_delivery',
-        args: [selectedEscrowId, deliveryUrl, deliveryNotes],
+        args: [BigInt(selectedEscrowId), deliveryUrl, deliveryNotes],
         value: 0n,
       };
 
@@ -403,7 +440,7 @@ export default function App() {
       const writeArgs = {
         address: contractAddress as `0x${string}`,
         functionName: 'adjudicate_escrow',
-        args: [escrowId],
+        args: [BigInt(escrowId)],
         value: 0n,
       };
 
@@ -449,7 +486,7 @@ export default function App() {
         txHash = await client.writeContract({
           address: contractAddress as `0x${string}`,
           functionName: 'manual_release',
-          args: [escrowId],
+          args: [BigInt(escrowId)],
           value: 0n,
         });
       } catch {
@@ -486,7 +523,7 @@ export default function App() {
         txHash = await client.writeContract({
           address: contractAddress as `0x${string}`,
           functionName: 'manual_refund',
-          args: [escrowId],
+          args: [BigInt(escrowId)],
           value: 0n,
         });
       } catch {

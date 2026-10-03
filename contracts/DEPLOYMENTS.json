@@ -1,0 +1,21 @@
+{
+  "network": "GenLayer Studionet",
+  "chainId": 61999,
+  "contractAddress": "0x2b58A537E2050D27F65DB8803508d05B1D712B75",
+  "deployTx": "0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e",
+  "createTx": "0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d",
+  "submitTx": "0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315",
+  "adjudicateTx": "0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b",
+  "escrowState": {
+    "status": "RELEASED",
+    "verdict": "Approved (82/100): The deliverable demonstrates a solid GenLayer project implementation with several key requirements met: (1) Decentralized AI validator consensus is implemented via GenLayer's intelligent contract framework with proper GenVM v0.6 runner pinning as noted; (2) Equivalence Principle for non-deterministic consensus is explicitly referenced in the linter rules ('Non-deterministic operations outside equivalence principle blocks') indicating strict enforcement; (3) Web deliverable proof is present via the production-ready Next.js 15 frontend with TypeScript, TanStack Query, and Radix UI; (4) Automated test suite is comprehensive with direct mode tests, integration tests, contract linting, and CI pipeline via GitHub Actions. Minor deductions: The README evidence is truncated (ends mid-sentence at 'Ru'), preventing full verification of all implementation details. The integration test coverage and actual contract-level Equivalence Principle implementation cannot be fully verified from the provided evidence alone. Overall the boilerplate satisfies the stated contract requirements with strong structural evidence.",
+    "score": "82"
+  },
+  "explorerUrls": {
+    "contract": "https://explorer-studio.genlayer.com/address/0x2b58A537E2050D27F65DB8803508d05B1D712B75",
+    "deployTx": "https://explorer-studio.genlayer.com/tx/0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e",
+    "createTx": "https://explorer-studio.genlayer.com/tx/0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d",
+    "submitTx": "https://explorer-studio.genlayer.com/tx/0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315",
+    "adjudicateTx": "https://explorer-studio.genlayer.com/tx/0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b"
+  }
+}
