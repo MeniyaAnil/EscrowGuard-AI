@@ -32,7 +32,7 @@ export const GENLAYER_NETWORKS = {
     nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
     rpcUrls: ['https://studio.genlayer.com/api'],
     blockExplorerUrls: ['https://explorer-studio.genlayer.com/'],
-    consensusContract: '0x82F000000000000000000000000000000000FF38',
+    consensusContract: '0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575',
     defaultContract: '0x2b58A537E2050D27F65DB8803508d05B1D712B75',
     faucet: 'https://studio.genlayer.com',
     type: 'Studio Network (Builder Track)'
@@ -121,8 +121,17 @@ export default function App() {
     'Implemented all milestone acceptance criteria according to specifications. Passing all unit and integration tests.'
   );
 
-  // Initialize GenLayer Client
-  const getGenLayerClient = useCallback(() => {
+  // Read-only Client (Uses public HTTP RPC without probing window.ethereum)
+  const getReadOnlyClient = useCallback(() => {
+    const selectedChain = networkKey === 'studionet' ? chains.studionet : chains.testnetBradbury;
+    return createClient({
+      chain: selectedChain,
+      endpoint: network.rpcUrls[0],
+    });
+  }, [networkKey, network.rpcUrls]);
+
+  // Signer Client (Used strictly on explicit user-initiated write transactions)
+  const getSignerClient = useCallback(() => {
     const selectedChain = networkKey === 'studionet' ? chains.studionet : chains.testnetBradbury;
     return createClient({
       chain: selectedChain,
@@ -131,7 +140,7 @@ export default function App() {
     });
   }, [networkKey, account]);
 
-  // Read Contract State directly from GenLayer Studionet RPC
+  // Read Contract State directly from GenLayer Studionet RPC (Zero unprompted wallet access)
   const refreshOnChainState = useCallback(async () => {
     if (!contractAddress || !ethers.isAddress(contractAddress)) return;
 
@@ -139,7 +148,7 @@ export default function App() {
     setContractError('');
 
     try {
-      const client = getGenLayerClient();
+      const client = getReadOnlyClient();
 
       // 1. Read all stored escrows from contract
       try {
@@ -236,7 +245,7 @@ export default function App() {
     } finally {
       setIsLoadingContract(false);
     }
-  }, [contractAddress, getGenLayerClient, network.chainName, account]);
+  }, [contractAddress, getReadOnlyClient, network.chainName, account]);
 
   // Initial and periodic sync
   useEffect(() => {
@@ -322,7 +331,7 @@ export default function App() {
     setLastTxHash('');
 
     try {
-      const client = getGenLayerClient();
+      const client = getSignerClient();
       const amountWei = ethers.parseEther(formAmount.toString());
 
       // Execute on-chain writeContract with attached value
@@ -333,30 +342,7 @@ export default function App() {
         value: amountWei,
       };
 
-      let txHash = '';
-      try {
-        txHash = await client.writeContract(writeArgs);
-      } catch (err: any) {
-        // Fallback: standard EIP-1193 transaction prompt with calldata
-        console.warn('writeContract direct call fallback to sendTransaction:', err.message);
-        const iface = new ethers.Interface([
-          'function create_escrow(address freelancer, string title, string requirements) payable returns (uint256)'
-        ]);
-        const data = iface.encodeFunctionData('create_escrow', [formFreelancer, formTitle, formRequirements]);
-
-        txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [
-            {
-              from: account,
-              to: contractAddress,
-              value: ethers.toBeHex(amountWei),
-              data: data,
-            },
-          ],
-        });
-      }
-
+      const txHash = await client.writeContract(writeArgs);
       setLastTxHash(txHash);
       setActiveTab('explore');
       setFormTitle('');
@@ -390,7 +376,7 @@ export default function App() {
     setLastTxHash('');
 
     try {
-      const client = getGenLayerClient();
+      const client = getSignerClient();
       const writeArgs = {
         address: contractAddress as `0x${string}`,
         functionName: 'submit_delivery',
@@ -398,26 +384,13 @@ export default function App() {
         value: 0n,
       };
 
-      let txHash = '';
-      try {
-        txHash = await client.writeContract(writeArgs);
-      } catch (err: any) {
-        const iface = new ethers.Interface([
-          'function submit_delivery(uint256 escrow_id, string delivery_url, string delivery_notes)'
-        ]);
-        const data = iface.encodeFunctionData('submit_delivery', [selectedEscrowId, deliveryUrl, deliveryNotes]);
-
-        txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: account, to: contractAddress, data }],
-        });
-      }
-
+      const txHash = await client.writeContract(writeArgs);
       setLastTxHash(txHash);
       setActiveTab('explore');
       setTimeout(() => refreshOnChainState(), 2000);
     } catch (err: any) {
-      setTxError(err.message || 'Submission failed');
+      console.error('submit_delivery error:', err);
+      setTxError(err.message || 'Submission failed or was rejected by user.');
     } finally {
       setTxPending(false);
     }
@@ -436,7 +409,7 @@ export default function App() {
     setLastTxHash('');
 
     try {
-      const client = getGenLayerClient();
+      const client = getSignerClient();
       const writeArgs = {
         address: contractAddress as `0x${string}`,
         functionName: 'adjudicate_escrow',
@@ -444,25 +417,12 @@ export default function App() {
         value: 0n,
       };
 
-      let txHash = '';
-      try {
-        txHash = await client.writeContract(writeArgs);
-      } catch (err: any) {
-        const iface = new ethers.Interface([
-          'function adjudicate_escrow(uint256 escrow_id)'
-        ]);
-        const data = iface.encodeFunctionData('adjudicate_escrow', [escrowId]);
-
-        txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: account, to: contractAddress, data }],
-        });
-      }
-
+      const txHash = await client.writeContract(writeArgs);
       setLastTxHash(txHash);
       setTimeout(() => refreshOnChainState(), 3000);
     } catch (err: any) {
-      setTxError(err.message || 'Adjudication transaction failed');
+      console.error('adjudicate_escrow error:', err);
+      setTxError(err.message || 'Adjudication transaction failed or was rejected by user.');
     } finally {
       setTxPending(false);
     }
@@ -478,28 +438,21 @@ export default function App() {
     setTxPending(true);
     setTxActionName(`Releasing Held GEN to Freelancer for Escrow #${escrowId}`);
     setTxError('');
+    setLastTxHash('');
 
     try {
-      const client = getGenLayerClient();
-      let txHash = '';
-      try {
-        txHash = await client.writeContract({
-          address: contractAddress as `0x${string}`,
-          functionName: 'manual_release',
-          args: [BigInt(escrowId)],
-          value: 0n,
-        });
-      } catch {
-        const iface = new ethers.Interface(['function manual_release(uint256 escrow_id)']);
-        txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: account, to: contractAddress, data: iface.encodeFunctionData('manual_release', [escrowId]) }],
-        });
-      }
+      const client = getSignerClient();
+      const txHash = await client.writeContract({
+        address: contractAddress as `0x${string}`,
+        functionName: 'manual_release',
+        args: [BigInt(escrowId)],
+        value: 0n,
+      });
       setLastTxHash(txHash);
       setTimeout(() => refreshOnChainState(), 2000);
     } catch (err: any) {
-      setTxError(err.message || 'Release failed');
+      console.error('manual_release error:', err);
+      setTxError(err.message || 'Release failed or was rejected by user.');
     } finally {
       setTxPending(false);
     }
@@ -515,28 +468,21 @@ export default function App() {
     setTxPending(true);
     setTxActionName(`Refunding Held GEN to Client for Escrow #${escrowId}`);
     setTxError('');
+    setLastTxHash('');
 
     try {
-      const client = getGenLayerClient();
-      let txHash = '';
-      try {
-        txHash = await client.writeContract({
-          address: contractAddress as `0x${string}`,
-          functionName: 'manual_refund',
-          args: [BigInt(escrowId)],
-          value: 0n,
-        });
-      } catch {
-        const iface = new ethers.Interface(['function manual_refund(uint256 escrow_id)']);
-        txHash = await window.ethereum.request({
-          method: 'eth_sendTransaction',
-          params: [{ from: account, to: contractAddress, data: iface.encodeFunctionData('manual_refund', [escrowId]) }],
-        });
-      }
+      const client = getSignerClient();
+      const txHash = await client.writeContract({
+        address: contractAddress as `0x${string}`,
+        functionName: 'manual_refund',
+        args: [BigInt(escrowId)],
+        value: 0n,
+      });
       setLastTxHash(txHash);
       setTimeout(() => refreshOnChainState(), 2000);
     } catch (err: any) {
-      setTxError(err.message || 'Refund failed');
+      console.error('manual_refund error:', err);
+      setTxError(err.message || 'Refund failed or was rejected by user.');
     } finally {
       setTxPending(false);
     }
@@ -605,7 +551,7 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-blue-400 via-indigo-300 to-teal-300 bg-clip-text text-transparent">
-                  GenHub AI
+                  EscrowGuard AI
                 </span>
                 <span className="text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/30">
                   GenVM Python
@@ -1120,7 +1066,7 @@ export default function App() {
                   Native On-Chain Value Flow:
                 </span>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
-                  Submitting this form triggers a real transaction prompt in your connected wallet for <strong>{formAmount || 0} GEN</strong>. The GenHub contract receives this value via <code className="text-blue-400 font-mono">gl.message.value</code> and holds it non-custodially until consensus triggers the payout.
+                  Submitting this form triggers a real transaction prompt in your connected wallet for <strong>{formAmount || 0} GEN</strong>. The EscrowGuard contract receives this value via <code className="text-blue-400 font-mono">gl.message.value</code> and holds it non-custodially until consensus triggers the payout.
                 </p>
               </div>
 
@@ -1213,7 +1159,7 @@ export default function App() {
             <div>
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
                 <Cpu className="w-5 h-5 text-indigo-400" />
-                <span>GenHub AI On-Chain Contract Specification</span>
+                <span>EscrowGuard AI On-Chain Contract Specification</span>
               </h2>
               <p className="text-xs text-slate-400">
                 Detailed breakdown of real read and write methods available in the deployed Intelligent Contract.
@@ -1425,7 +1371,7 @@ class GenHubEscrow(gl.Contract):
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-[#07090e] py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© 2026 GenHub AI. Built for the GenLayer Ecosystem & Builder Track.</p>
+          <p>© 2026 EscrowGuard AI. Built for the GenLayer Ecosystem & Builder Track.</p>
           <div className="flex items-center gap-4 text-slate-400">
             <a href="https://genlayer.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
               GenLayer Official
