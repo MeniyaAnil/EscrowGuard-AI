@@ -24,21 +24,39 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 
 ---
 
-## 🚀 Live Verified Deployment (GenLayer Studionet)
+---
 
-> **Verified Intelligent Contract Address:**  
-> [`0x2b58A537E2050D27F65DB8803508d05B1D712B75`](https://explorer-studio.genlayer.com/address/0x2b58A537E2050D27F65DB8803508d05B1D712B75)
+## 🌐 Production Deployments & Canonical Access
 
-### 📊 End-to-End On-Chain Transaction Evidence
+- **Canonical Deployed DApp:** [`https://genhub-ai.vercel.app`](https://genhub-ai.vercel.app) *(Official entry point with strict HTTP security headers, anti-clickjacking, and zero unprompted wallet access)*
+- **Mirror / Secondary Alias:** [`https://escrowguard-ai.vercel.app`](https://escrowguard-ai.vercel.app)
+- **GitHub Repository:** [`https://github.com/MeniyaAnil/EscrowGuard-AI`](https://github.com/MeniyaAnil/EscrowGuard-AI)
+
+---
+
+## 🚀 Live Upgraded Intelligent Contract (GenLayer Studionet)
+
+> **Verified Prompt-Hardened Contract Address:**  
+> [`0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC`](https://explorer-studio.genlayer.com/address/0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC)
+
+### 📊 End-to-End On-Chain Transaction Evidence (Upgraded Contract)
 
 | Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
 |:--- |:---|:---|:---|:---|:---|
-| 1 | **Contract Deployment** | `0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e) |
-| 2 | **Create Escrow (Deposit 1 GEN)** | `0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d) |
-| 3 | **Submit Delivery (Web Proof)** | `0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315) |
-| 4 | **AI Jury Adjudication & Payout** | `0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b` | `MAJORITY_AGREE` | Status: `RELEASED` (Score 82) | [Inspect](https://explorer-studio.genlayer.com/tx/0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b) |
+| 1 | **Contract Deployment** | `0xded3dc5b5276676ac61e4e0a60b82aec72ce52da8c62384f1f23e356a1c03379` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0xded3dc5b5276676ac61e4e0a60b82aec72ce52da8c62384f1f23e356a1c03379) |
+| 2 | **Create Escrow (Deposit 1 GEN)** | `0xbb913455554e501c80f2aa61631a670bb867bacf2dc2fdeaa0aa4c62bc9aa6e5` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xbb913455554e501c80f2aa61631a670bb867bacf2dc2fdeaa0aa4c62bc9aa6e5) |
+| 3 | **Submit Delivery (Web Proof)** | `0x6e1ab6213c1cba840e6143166537708ee90d52c3ac6fdaa8783c6d054e0392e5` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x6e1ab6213c1cba840e6143166537708ee90d52c3ac6fdaa8783c6d054e0392e5) |
+| 4 | **AI Jury Adjudication (Vigilant Eval)** | `0x8057afb4e1623b89075ef2ebe700b1a825ff090bf98e8d3192ec0fbbe1973799` | `MAJORITY_AGREE` | Status: `REFUNDED` (Score 38) | [Inspect](https://explorer-studio.genlayer.com/tx/0x8057afb4e1623b89075ef2ebe700b1a825ff090bf98e8d3192ec0fbbe1973799) |
 
-Full documentation and verification scripts are available in [`contracts/DEPLOYMENTS.md`](./contracts/DEPLOYMENTS.md).
+---
+
+## 🛡️ Evaluator Security & Prompt-Injection Hardening
+
+The contract implements multi-layer prompt injection protections in `contracts/escrow_guard.py`:
+1. **XML Delimiter Isolation & Escaping:** All untrusted web content is encapsulated inside `<UNTRUSTED_EXTERNAL_EVIDENCE>` tags. Any closing tags in user deliverables are replaced with `[ESCAPED_DELIMITER]` to prevent delimiter breakouts.
+2. **Mandatory Security Directives:** The system instructions explicitly command the AI validator to treat evidence as passive data and immediately reject (Score 0, `approved: false`) any submission attempting prompt injection.
+3. **Evidence Boundary & Dual-Window Telemetry:** Eliminates silent omission beyond 3,000 characters. Text up to 8,000 characters is evaluated in full. For larger documents, dual-boundary sampling preserves both initial architecture/specs (first 5,000 chars) and final test/delivery proofs (last 3,000 chars) with explicit telemetry metadata.
+4. **Automated Verification:** Verified by automated test suites in [`tests/test_evaluator_security.cjs`](./tests/test_evaluator_security.cjs) and [`tests/test_prompt_injection.py`](./tests/test_prompt_injection.py).
 
 ---
 
