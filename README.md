@@ -138,7 +138,17 @@ npm install
 npm run dev
 ```
 
-### 2. Deploy Contract to GenLayer Studio
+### 2. Run Evaluator Security & Prompt-Injection Tests
+
+```bash
+# Run automated evaluator security test suite (Node.js)
+npm test
+
+# Or run the Python verification suite
+python tests/test_prompt_injection.py
+```
+
+### 3. Deploy Contract to GenLayer Studio
 
 1. Navigate to [GenLayer Studio](https://studio.genlayer.com).
 2. Connect your wallet to the **GenLayer Bradbury Testnet**.
