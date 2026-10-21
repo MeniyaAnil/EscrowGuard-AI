@@ -33,7 +33,7 @@ export const GENLAYER_NETWORKS = {
     rpcUrls: ['https://studio.genlayer.com/api'],
     blockExplorerUrls: ['https://explorer-studio.genlayer.com/'],
     consensusContract: '0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575',
-    defaultContract: '0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC',
+    defaultContract: '0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0',
     faucet: 'https://studio.genlayer.com',
     type: 'Studio Network (Builder Track)'
   },
@@ -46,7 +46,7 @@ export const GENLAYER_NETWORKS = {
     rpcUrls: ['https://rpc-bradbury.genlayer.com'],
     blockExplorerUrls: ['https://explorer-bradbury.genlayer.com/'],
     consensusContract: '0x8BCb2cAC4222D081F0579e0f2fA71fF67b0C016c',
-    defaultContract: '0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC',
+    defaultContract: '0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0',
     faucet: 'https://testnet-faucet.genlayer.foundation',
     type: 'Production Testnet (Validator Track)'
   }

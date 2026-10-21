@@ -17,35 +17,35 @@
 - **Chain ID:** `61999` (`0xf22f`)
 - **RPC URL:** `https://studio.genlayer.com/api`
 - **Block Explorer:** [https://explorer-studio.genlayer.com/](https://explorer-studio.genlayer.com/)
-- **Deployed Contract Address:**  
-  [`0x2b58A537E2050D27F65DB8803508d05B1D712B75`](https://explorer-studio.genlayer.com/address/0x2b58A537E2050D27F65DB8803508d05B1D712B75)
+- **Canonical Deployed Contract Address:**  
+  [`0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0`](https://explorer-studio.genlayer.com/address/0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0)
 
 ---
 
 ## 🏛️ End-to-End On-Chain Lifecycle Evidence
 
-Every step of the autonomous milestone escrow lifecycle has been executed and finalized on GenLayer Studionet under decentralized validator jury consensus (`MAJORITY_AGREE`).
+Every step of the autonomous milestone escrow lifecycle has been executed and finalized on GenLayer Studionet under decentralized validator jury consensus (`MAJORITY_AGREE`, Status `7` / `FINALIZED`).
 
 | # | Lifecycle Step | Function Name | Transaction Hash | Consensus Result | On-Chain State | Explorer Link |
 |---|----------------|---------------|------------------|------------------|----------------|---------------|
-| 1 | **Contract Deployment** | `deployContract()` | `0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e` | `MAJORITY_AGREE` | Contract Initialized (`count = 0`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0x1fde04b61913bdd791370675d1719ed9a382ede3dce2f030ef2ff9bf739b859e) |
-| 2 | **Escrow Creation & Deposit** | `create_escrow` | `0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0x44e704d2258b9f4446a196c1af75d11504913c80fa5c136ef5b44cedb0ba081d) |
-| 3 | **Deliverable Submission** | `submit_delivery` | `0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315` | `MAJORITY_AGREE` | Stored live web proof URL (`status: SUBMITTED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0xaaf361e96bdcff0ae5764ba768714eee8d2e5ed8b1cb52ef795fb89464ba1315) |
-| 4 | **Decentralized AI Jury Adjudication** | `adjudicate_escrow` | `0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b` | `MAJORITY_AGREE` | Released payout to freelancer (`status: RELEASED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0xe248524dbfdd39475cb30388d1108ed9dd7f6936528c65ae1c97105e619ee29b) |
+| 1 | **Contract Deployment** | `deployContract()` | `0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7` | `MAJORITY_AGREE` | Contract Initialized (`count = 0`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7) |
+| 2 | **Escrow Creation & Deposit** | `create_escrow` | `0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80) |
+| 3 | **Deliverable Submission** | `submit_delivery` | `0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67` | `MAJORITY_AGREE` | Stored live web proof URL (`status: SUBMITTED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67) |
+| 4 | **Decentralized AI Jury Adjudication** | `adjudicate_escrow` | `0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29` | `MAJORITY_AGREE` | Chunked evaluation passed, released payout to freelancer (`status: RELEASED`) | [View on Explorer](https://explorer-studio.genlayer.com/tx/0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29) |
 
 ---
 
 ## 🧠 Real On-Chain AI Jury Verdict (Escrow #1)
 
 - **Escrow ID:** `1`
-- **Milestone Title:** `GenLayer Intelligent Contract Integration`
-- **Requirements:** `Implement decentralized AI validator consensus with Equivalence Principle and web deliverable proof.`
-- **Deliverable URL:** `https://raw.githubusercontent.com/genlayerlabs/genlayer-project-boilerplate/main/README.md`
-- **Final Consensus Score:** `82 / 100` (Threshold: 60)
+- **Milestone Title:** `Autonomous Security Audit & Prompt Hardening`
+- **Requirements:** `Provide verified automated test suites with chunked evaluation and prompt injection resistance.`
+- **Deliverable URL:** `https://raw.githubusercontent.com/MeniyaAnil/EscrowGuard-AI/main/README.md`
+- **Final Consensus Score:** `78 / 100` (Threshold: 60)
 - **Final Status:** **`RELEASED`**
-- **Native Transfer:** `1.0 GEN` emitted from contract balance to freelancer address (`0xc79D1F8d757A72191035E2D4BCDACc8acb764173`).
+- **Native Transfer:** `1.0 GEN` emitted from contract balance to freelancer address (`0x325890338CCe2FeD41c0bc19b0E2807172a1496A`).
 - **Official Jury Consensus Verdict Text:**
-  > *"Approved (82/100): The deliverable demonstrates a solid GenLayer project implementation with several key requirements met: (1) Decentralized AI validator consensus is implemented via GenLayer's intelligent contract framework with proper GenVM v0.6 runner pinning as noted; (2) Equivalence Principle for non-deterministic consensus is explicitly referenced in the linter rules ('Non-deterministic operations outside equivalence principle blocks') indicating strict enforcement; (3) Web deliverable proof is present via the production-ready Next.js 15 frontend with TypeScript, TanStack Query, and Radix UI; (4) Automated test suite is comprehensive with direct mode tests, integration tests, contract linting, and CI pipeline via GitHub Actions..."*
+  > *"Approved (78/100): Chunk 1: The submitted README evidence partially satisfies the contract requirements for verified automated test suites with chunked evaluation and prompt-injection resistance. Evidence of prompt-injection defense is well-documented: the contract implements XML delimiter isolation, mandatory security directives, evidence boundary telemetry, and dual-window chunked sampling... Chunk 2: This is chunk 2 of 2 of the README evidence. The content describes: (1) automated test suite commands ('npm test' and 'python tests/test_prompt_injection.py'), indicating test suites exist; (2) explicit prompt injection defense mechanisms including delimiter-based isolation of untrusted evidence and validator instructions to ignore embedded instructions; (3) chunked evaluation is referenced implicitly via the GenLayer contract structure... Score reflects that documentation of the required features is present and credible..."*
 
 ---
 
@@ -56,7 +56,7 @@ Any steward can immediately verify this contract on Studionet in Node.js using `
 ```javascript
 const { createClient, chains } = require('genlayer-js');
 const client = createClient({ chain: chains.studionet });
-const CONTRACT_ADDRESS = '0x2b58A537E2050D27F65DB8803508d05B1D712B75';
+const CONTRACT_ADDRESS = '0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0';
 
 // 1. Query Total Escrows
 const count = await client.readContract({
@@ -73,5 +73,5 @@ const escrow = await client.readContract({
   args: [1n]
 });
 console.log('Escrow #1:', escrow);
-// Returns: status: 'RELEASED', verdict_score: 82, full verdict text
+// Returns: status: 'RELEASED', verdict_score: 78, full chunked evaluation verdict text
 ```

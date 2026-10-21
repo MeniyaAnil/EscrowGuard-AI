@@ -36,27 +36,29 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 
 ## 🚀 Live Upgraded Intelligent Contract (GenLayer Studionet)
 
-> **Verified Prompt-Hardened Contract Address:**  
-> [`0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC`](https://explorer-studio.genlayer.com/address/0xC96D7F9ddBE2E17E912aFd857D6Ae197E6B247cC)
+> **Verified Canonical Contract Address:**  
+> [`0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0`](https://explorer-studio.genlayer.com/address/0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0)
 
 ### 📊 End-to-End On-Chain Transaction Evidence (Upgraded Contract)
 
 | Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
 |:--- |:---|:---|:---|:---|:---|
-| 1 | **Contract Deployment** | `0xded3dc5b5276676ac61e4e0a60b82aec72ce52da8c62384f1f23e356a1c03379` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0xded3dc5b5276676ac61e4e0a60b82aec72ce52da8c62384f1f23e356a1c03379) |
-| 2 | **Create Escrow (Deposit 1 GEN)** | `0xbb913455554e501c80f2aa61631a670bb867bacf2dc2fdeaa0aa4c62bc9aa6e5` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xbb913455554e501c80f2aa61631a670bb867bacf2dc2fdeaa0aa4c62bc9aa6e5) |
-| 3 | **Submit Delivery (Web Proof)** | `0x6e1ab6213c1cba840e6143166537708ee90d52c3ac6fdaa8783c6d054e0392e5` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x6e1ab6213c1cba840e6143166537708ee90d52c3ac6fdaa8783c6d054e0392e5) |
-| 4 | **AI Jury Adjudication (Vigilant Eval)** | `0x8057afb4e1623b89075ef2ebe700b1a825ff090bf98e8d3192ec0fbbe1973799` | `MAJORITY_AGREE` | Status: `REFUNDED` (Score 38) | [Inspect](https://explorer-studio.genlayer.com/tx/0x8057afb4e1623b89075ef2ebe700b1a825ff090bf98e8d3192ec0fbbe1973799) |
+| 1 | **Contract Deployment** | `0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7) |
+| 2 | **Create Escrow (Deposit 1 GEN)** | `0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80) |
+| 3 | **Submit Delivery (Web Proof)** | `0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67) |
+| 4 | **AI Jury Adjudication (Chunked Eval)** | `0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29` | `MAJORITY_AGREE` | Status: `RELEASED` (Score 78) | [Inspect](https://explorer-studio.genlayer.com/tx/0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29) |
 
 ---
 
-## 🛡️ Evaluator Security & Prompt-Injection Hardening
+## 🛡️ Evaluator Security, Chunked Assessment & Prompt-Injection Hardening
 
-The contract implements multi-layer prompt injection protections in `contracts/escrow_guard.py`:
+The contract implements multi-layer defenses in `contracts/escrow_guard.py`:
 1. **XML Delimiter Isolation & Escaping:** All untrusted web content is encapsulated inside `<UNTRUSTED_EXTERNAL_EVIDENCE>` tags. Any closing tags in user deliverables are replaced with `[ESCAPED_DELIMITER]` to prevent delimiter breakouts.
 2. **Mandatory Security Directives:** The system instructions explicitly command the AI validator to treat evidence as passive data and immediately reject (Score 0, `approved: false`) any submission attempting prompt injection.
-3. **Evidence Boundary & Dual-Window Telemetry:** Eliminates silent omission beyond 3,000 characters. Text up to 8,000 characters is evaluated in full. For larger documents, dual-boundary sampling preserves both initial architecture/specs (first 5,000 chars) and final test/delivery proofs (last 3,000 chars) with explicit telemetry metadata.
-4. **Automated Verification:** Verified by automated test suites in [`tests/test_evaluator_security.cjs`](./tests/test_evaluator_security.cjs) and [`tests/test_prompt_injection.py`](./tests/test_prompt_injection.py).
+3. **Complete Evidence Handling via Chunked Evaluation:** Eliminates blind spots. Documents up to 8,000 chars are evaluated in full. Documents between 8,001 and 16,000 chars are evaluated across sequential overlapping chunks (covering 100% of the document including the middle section). Oversized documents (>16,000 chars) are safely rejected to prevent incomplete assessment.
+4. **Defined Aggregation Rule:** Zero-tolerance short circuit (if any chunk flags prompt injection, the entire submission is rejected with score 0). Material evidence in any chunk is credited via max score.
+5. **Validator Agreement on Injection Detection:** The validator re-execution function explicitly requires validator consensus on `injection_detected` as well as approval verdict and score tolerance.
+6. **Automated Test Suites:** Verified by tests in [`tests/test_direct_mode.py`](./tests/test_direct_mode.py) (GenLayer Direct Mode), [`tests/test_production_contract.py`](./tests/test_production_contract.py), and [`tests/test_evaluator_security.cjs`](./tests/test_evaluator_security.cjs).
 
 ---
 
@@ -141,11 +143,14 @@ npm run dev
 ### 2. Run Evaluator Security & Prompt-Injection Tests
 
 ```bash
-# Run automated evaluator security test suite (Node.js)
+# Run automated evaluator security test suite (Node.js - 6 tests)
 npm test
 
-# Or run the Python verification suite
-python tests/test_prompt_injection.py
+# Run production contract execution & regression test suite (Python - 5 tests)
+python tests/test_production_contract.py
+
+# Run GenLayer Direct Mode test suite (pytest)
+pytest tests/test_direct_mode.py
 ```
 
 ### 3. Deploy Contract to GenLayer Studio
