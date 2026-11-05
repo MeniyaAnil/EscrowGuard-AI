@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node tests/test_evaluator_security.cjs"
+    "test": "node tests/test_evaluator_security.cjs && node tests/test_onchain_verification.cjs",
+    "test:onchain": "node tests/test_onchain_verification.cjs"
   },
   "dependencies": {
     "autoprefixer": "^10.6.1",

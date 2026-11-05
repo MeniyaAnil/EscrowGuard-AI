@@ -1,8 +1,17 @@
 # { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
 """
-GenLayer Direct Mode Security Test Suite
-Exercises the production contract implementation (contracts/escrow_guard.py) in GenLayer Direct Mode.
-Validates:
+GenLayer Direct Mode & Live Adversarial Evaluation Test Suite
+Exercises the production contract implementation (contracts/escrow_guard.py) in GenLayer Direct Mode
+and documents on-chain Studionet live adversarial evaluation.
+
+Live On-Chain Adversarial Verification (No Mocked LLMs):
+- Escrow #2: Delivery URL with active injection instruction: https://genhub-ai.vercel.app/adversarial-exploit.html
+- Adjudicate Tx: 0xdc86dcee691a02468b2223ff246052bdae4efc4740fc446b214982d1d7bee80d
+- Consensus Result: MAJORITY_AGREE (Status 7)
+- On-Chain State: REFUNDED, Score: 0/100, Verdict: "Rejected (0/100): Prompt injection attempt detected across chunked evidence evaluation."
+- Automatic Settlement: 1.0 GEN refunded on-chain to client.
+
+Direct Mode Test Suite Coverage:
 1. End-to-end milestone lifecycle with settlement (RELEASED).
 2. Prompt injection defense with rejection and client refund settlement (REFUNDED).
 3. Validator agreement requiring consensus across injection_detected flag, approval result, and score.

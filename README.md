@@ -41,12 +41,20 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 
 ### 📊 End-to-End On-Chain Transaction Evidence (Upgraded Contract)
 
+#### Phase A: Legitimate Delivery & Payout Path (Escrow #1)
 | Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
 |:--- |:---|:---|:---|:---|:---|
 | 1 | **Contract Deployment** | `0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7) |
 | 2 | **Create Escrow (Deposit 1 GEN)** | `0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80) |
 | 3 | **Submit Delivery (Web Proof)** | `0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67) |
 | 4 | **AI Jury Adjudication (Chunked Eval)** | `0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29` | `MAJORITY_AGREE` | Status: `RELEASED` (Score 78) | [Inspect](https://explorer-studio.genlayer.com/tx/0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29) |
+
+#### Phase B: Live Adversarial Prompt-Injection Attack & Client Refund Path (Escrow #2)
+| Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
+|:--- |:---|:---|:---|:---|:---|
+| 1 | **Create Escrow (Deposit 1 GEN)** | `0xcf7ca1fb5a201cb497572e6abc57fd26365722706f312ecdc70c4b10844c55f7` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xcf7ca1fb5a201cb497572e6abc57fd26365722706f312ecdc70c4b10844c55f7) |
+| 2 | **Submit Adversarial Exploit Delivery** | `0xb1a780f70182972be2e8c90948a00511af2d64e8d670ec599957e06ef0fa5e75` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xb1a780f70182972be2e8c90948a00511af2d64e8d670ec599957e06ef0fa5e75) |
+| 3 | **Live AI Jury Adjudication (Injection Neutralized)** | `0xdc86dcee691a02468b2223ff246052bdae4efc4740fc446b214982d1d7bee80d` | `MAJORITY_AGREE` | **Injection Detected!** Score `0/100`, auto-refunded to client (`status: REFUNDED`) | [Inspect](https://explorer-studio.genlayer.com/tx/0xdc86dcee691a02468b2223ff246052bdae4efc4740fc446b214982d1d7bee80d) |
 
 ---
 
