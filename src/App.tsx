@@ -137,7 +137,7 @@ export default function App() {
   // Chain Config Resolution
   const getChainConfig = useCallback(() => {
     if (networkKey === 'studio-dev') {
-      return {
+      return (chains as any).studioDevnet || {
         ...chains.studionet,
         id: 61997,
         name: 'GenLayer Studio Devnet',
@@ -333,6 +333,18 @@ export default function App() {
     }
   };
 
+  // Safe Fee Estimator for GenLayer Studio-dev (Chain 61997) transactions
+  const getSafeWriteFees = async (client: any) => {
+    try {
+      if (client && typeof client.estimateTransactionFees === 'function') {
+        return await client.estimateTransactionFees();
+      }
+    } catch (e) {
+      console.warn('Fee estimation skipped or unavailable:', e);
+    }
+    return undefined;
+  };
+
   // 1. Real Write: Create Escrow (Payable - Locks actual GEN on-chain)
   const handleCreateEscrow = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -360,13 +372,15 @@ export default function App() {
     try {
       const client = getSignerClient();
       const amountWei = ethers.parseEther(formAmount.toString());
+      const fees = await getSafeWriteFees(client);
 
       // Execute on-chain writeContract with attached value
-      const writeArgs = {
+      const writeArgs: any = {
         address: contractAddress as `0x${string}`,
         functionName: 'create_escrow',
         args: [formFreelancer, formTitle, formRequirements],
         value: amountWei,
+        ...(fees ? { fees } : {}),
       };
 
       const txHash = await client.writeContract(writeArgs);
@@ -404,11 +418,13 @@ export default function App() {
 
     try {
       const client = getSignerClient();
-      const writeArgs = {
+      const fees = await getSafeWriteFees(client);
+      const writeArgs: any = {
         address: contractAddress as `0x${string}`,
         functionName: 'submit_delivery',
         args: [BigInt(selectedEscrowId), deliveryUrl, deliveryNotes],
         value: 0n,
+        ...(fees ? { fees } : {}),
       };
 
       const txHash = await client.writeContract(writeArgs);
@@ -437,11 +453,13 @@ export default function App() {
 
     try {
       const client = getSignerClient();
-      const writeArgs = {
+      const fees = await getSafeWriteFees(client);
+      const writeArgs: any = {
         address: contractAddress as `0x${string}`,
         functionName: 'adjudicate_escrow',
         args: [BigInt(escrowId)],
         value: 0n,
+        ...(fees ? { fees } : {}),
       };
 
       const txHash = await client.writeContract(writeArgs);
@@ -469,11 +487,13 @@ export default function App() {
 
     try {
       const client = getSignerClient();
+      const fees = await getSafeWriteFees(client);
       const txHash = await client.writeContract({
         address: contractAddress as `0x${string}`,
         functionName: 'manual_release',
         args: [BigInt(escrowId)],
         value: 0n,
+        ...(fees ? { fees } : {}),
       });
       setLastTxHash(txHash);
       setTimeout(() => refreshOnChainState(), 2000);
@@ -499,11 +519,13 @@ export default function App() {
 
     try {
       const client = getSignerClient();
+      const fees = await getSafeWriteFees(client);
       const txHash = await client.writeContract({
         address: contractAddress as `0x${string}`,
         functionName: 'manual_refund',
         args: [BigInt(escrowId)],
         value: 0n,
+        ...(fees ? { fees } : {}),
       });
       setLastTxHash(txHash);
       setTimeout(() => refreshOnChainState(), 2000);
