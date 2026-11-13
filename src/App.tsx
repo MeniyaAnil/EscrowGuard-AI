@@ -24,6 +24,19 @@ import { ethers } from 'ethers';
 
 // Official GenLayer Network Specifications
 export const GENLAYER_NETWORKS = {
+  'studio-dev': {
+    id: 'studio-dev',
+    chainId: '0xf22d', // 61997
+    chainIdDecimal: 61997,
+    chainName: 'GenLayer Studio Devnet',
+    nativeCurrency: { name: 'GEN Token', symbol: 'GEN', decimals: 18 },
+    rpcUrls: ['https://studio-dev.genlayer.com/api'],
+    blockExplorerUrls: ['https://studio-dev.genlayer.com/'],
+    consensusContract: '0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575',
+    defaultContract: '0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53',
+    faucet: 'https://studio-dev.genlayer.com',
+    type: 'Studio Devnet (Canonical Active)'
+  },
   studionet: {
     id: 'studionet',
     chainId: '0xf22f', // 61999
@@ -35,7 +48,7 @@ export const GENLAYER_NETWORKS = {
     consensusContract: '0xb7278A61aa25c888815aFC32Ad3cC52fF24fE575',
     defaultContract: '0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0',
     faucet: 'https://studio.genlayer.com',
-    type: 'Studio Network (Builder Track)'
+    type: 'Studio Network (Legacy)'
   },
   bradbury: {
     id: 'bradbury',
@@ -75,11 +88,11 @@ export interface EscrowAgreement {
 }
 
 export default function App() {
-  // Network selection
-  const [networkKey, setNetworkKey] = useState<'studionet' | 'bradbury'>('studionet');
+  // Network selection (Default: GenLayer Studio Devnet Chain 61997)
+  const [networkKey, setNetworkKey] = useState<'studio-dev' | 'studionet' | 'bradbury'>('studio-dev');
   const network = GENLAYER_NETWORKS[networkKey];
 
-  // Active Contract Address on GenLayer Studionet
+  // Active Contract Address on GenLayer Studio Devnet
   const [contractAddress, setContractAddress] = useState<string>(network.defaultContract);
   const [customContractInput, setCustomContractInput] = useState<string>(network.defaultContract);
   const [isEditingContract, setIsEditingContract] = useState<boolean>(false);
@@ -121,24 +134,38 @@ export default function App() {
     'Implemented all milestone acceptance criteria according to specifications. Passing all unit and integration tests.'
   );
 
+  // Chain Config Resolution
+  const getChainConfig = useCallback(() => {
+    if (networkKey === 'studio-dev') {
+      return {
+        ...chains.studionet,
+        id: 61997,
+        name: 'GenLayer Studio Devnet',
+        rpcUrls: { default: { http: ['https://studio-dev.genlayer.com/api'] } },
+        blockExplorers: { default: { name: 'Studio Dev', url: 'https://studio-dev.genlayer.com' } }
+      };
+    }
+    return networkKey === 'studionet' ? chains.studionet : chains.testnetBradbury;
+  }, [networkKey]);
+
   // Read-only Client (Uses public HTTP RPC without probing window.ethereum)
   const getReadOnlyClient = useCallback(() => {
-    const selectedChain = networkKey === 'studionet' ? chains.studionet : chains.testnetBradbury;
+    const selectedChain = getChainConfig();
     return createClient({
       chain: selectedChain,
       endpoint: network.rpcUrls[0],
     });
-  }, [networkKey, network.rpcUrls]);
+  }, [getChainConfig, network.rpcUrls]);
 
   // Signer Client (Used strictly on explicit user-initiated write transactions)
   const getSignerClient = useCallback(() => {
-    const selectedChain = networkKey === 'studionet' ? chains.studionet : chains.testnetBradbury;
+    const selectedChain = getChainConfig();
     return createClient({
       chain: selectedChain,
       account: account ? (account as `0x${string}`) : undefined,
       provider: typeof window !== 'undefined' ? window.ethereum : undefined,
     });
-  }, [networkKey, account]);
+  }, [getChainConfig, account]);
 
   // Read Contract State directly from GenLayer Studionet RPC (Zero unprompted wallet access)
   const refreshOnChainState = useCallback(async () => {
@@ -505,9 +532,10 @@ export default function App() {
           <span className="text-slate-400">Network:</span>
           <select
             value={networkKey}
-            onChange={(e) => setNetworkKey(e.target.value as 'studionet' | 'bradbury')}
+            onChange={(e) => setNetworkKey(e.target.value as 'studio-dev' | 'studionet' | 'bradbury')}
             className="bg-slate-900 border border-slate-700 text-blue-400 font-mono rounded px-2 py-0.5 text-xs focus:outline-none"
           >
+            <option value="studio-dev">Studio Devnet (Chain 61997 - Active)</option>
             <option value="studionet">Studionet (Chain 61999)</option>
             <option value="bradbury">Bradbury Testnet (Chain 4221)</option>
           </select>
@@ -750,7 +778,7 @@ export default function App() {
               <RefreshCw className="w-5 h-5 text-blue-400 animate-spin" />
               <div>
                 <strong className="block text-sm text-white">{txActionName}</strong>
-                <span>Awaiting signature and consensus on GenLayer Studionet...</span>
+                <span>Awaiting signature and consensus on {network.chainName}...</span>
               </div>
             </div>
           </div>

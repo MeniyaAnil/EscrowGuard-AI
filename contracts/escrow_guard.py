@@ -1,13 +1,20 @@
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+# { "Depends": "py-genlayer:babwp9t37jw9g4j2bccgn14g6x7x9s1f7dsmh7emvz735pz4zxa0" }
 
 # ==============================================================================
 # GenHub AI - Autonomous Milestone & Deliverable Escrow for GenLayer
-# Built for GenLayer Bradbury Testnet & GenLayer Studio
+# Built for GenLayer Studio Devnet (Chain ID 61997 / 0xf22d)
 # ==============================================================================
 
 import json
 from dataclasses import dataclass
+import genlayer as gl
 from genlayer import *
+
+# Aliases for Studio-dev GenVM v0.8 compatibility
+Address = gl.Address
+Contract = gl.contract.Contract
+allow_storage = gl.storage.allow
+u256 = gl.u256
 
 # Interface for external GEN transfers to EOAs or EVM contracts on GenLayer Chain
 @gl.evm.contract_interface
@@ -32,14 +39,14 @@ class Escrow:
     verdict: str
     verdict_score: u256
 
-class GenHubEscrow(gl.Contract):
+class GenHubEscrow(gl.contract.Contract):
     escrow_count: u256
-    escrows: TreeMap[u256, Escrow]
+    escrows: gl.storage.TreeMap[gl.u256, Escrow]
     platform_admin: Address
 
     def __init__(self):
         self.escrow_count = u256(0)
-        self.escrows = TreeMap()
+        self.escrows = gl.storage.inmem_allocate(gl.storage.TreeMap[gl.u256, Escrow])
         self.platform_admin = gl.message.sender_address
 
     @gl.public.write.payable
@@ -231,13 +238,14 @@ class GenHubEscrow(gl.Contract):
                 "reasoning": combined_reasoning
             }, sort_keys=True)
 
-        def validator_fn(leader_result) -> bool:
+        def validator_fn(leader_result: gl.vm.Result) -> bool:
             if not isinstance(leader_result, gl.vm.Return):
                 return False
-            validator_raw = leader_fn()
-            leader_raw = leader_result.calldata
-            val_data = json.loads(validator_raw)
-            ldr_data = json.loads(leader_raw)
+            val_res = gl.vm.spawn_sandbox(leader_fn)
+            if not isinstance(val_res, gl.vm.Return):
+                return False
+            val_data = json.loads(val_res.calldata)
+            ldr_data = json.loads(leader_result.calldata)
 
             # 1. Enforce strict validator agreement on injection detection flag
             val_injection = bool(val_data.get("injection_detected", False))
@@ -254,7 +262,7 @@ class GenHubEscrow(gl.Contract):
 
             return injection_match and approved_match and score_diff <= 15
 
-        res_str = gl.vm.run_nondet_unsafe(leader_fn, validator_fn)
+        res_str = gl.vm.run_nondet(leader_fn, validator_fn)
         evaluation = json.loads(res_str)
 
         injection_detected = bool(evaluation.get("injection_detected", False))

@@ -34,27 +34,29 @@ Traditional freelance platforms (Upwork, Fiverr) rely on slow, expensive, and op
 
 ---
 
-## 🚀 Live Upgraded Intelligent Contract (GenLayer Studionet)
+## 🚀 Live Intelligent Contract on GenLayer Studio Devnet (Chain 61997)
 
 > **Verified Canonical Contract Address:**  
-> [`0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0`](https://explorer-studio.genlayer.com/address/0x58078Acaf7D3ea7d5c11547Cc92A8cC9fFB6F1a0)
+> [`0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53`](https://studio-dev.genlayer.com/address/0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53)  
+> **Pinned GenVM v0.8 Runner:** `# { "Depends": "py-genlayer:babwp9t37jw9g4j2bccgn14g6x7x9s1f7dsmh7emvz735pz4zxa0" }`  
+> **Network:** GenLayer Studio Devnet (Chain ID `61997` / `0xf22d`, RPC: `https://studio-dev.genlayer.com/api`)
 
-### 📊 End-to-End On-Chain Transaction Evidence (Upgraded Contract)
+### 📊 End-to-End On-Chain Transaction Evidence (Studio-dev Chain 61997)
 
-#### Phase A: Legitimate Delivery & Payout Path (Escrow #1)
+#### Phase A: Legitimate Delivery & Settlement Path (Escrow #1)
 | Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
 |:--- |:---|:---|:---|:---|:---|
-| 1 | **Contract Deployment** | `0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://explorer-studio.genlayer.com/tx/0xaed6bca96745aa5c4a242327eb64483d2eaf09b78abf75f69c73b0af39ccdde7) |
-| 2 | **Create Escrow (Deposit 1 GEN)** | `0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x8d7f56ebba877d1ce6f8922d93ef44d700b6814b3114aa8042d78f6d42006f80) |
-| 3 | **Submit Delivery (Web Proof)** | `0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0x7ed047de7c8340ece83fdf3f3feec661235b9984b1d8940df1add7f79e6b5a67) |
-| 4 | **AI Jury Adjudication (Chunked Eval)** | `0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29` | `MAJORITY_AGREE` | Status: `RELEASED` (Score 78) | [Inspect](https://explorer-studio.genlayer.com/tx/0x5771f402fe56e4967954aca7a94abd93205a518bfe3f1468738f643bf7df1d29) |
+| 1 | **Contract Deployment** | `0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140` | `MAJORITY_AGREE` | Contract Initialized | [Inspect](https://studio-dev.genlayer.com/tx/0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140) |
+| 2 | **Create Escrow (Deposit 1 GEN)** | `0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://studio-dev.genlayer.com/tx/0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb) |
+| 3 | **Submit Delivery (Web Proof)** | `0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://studio-dev.genlayer.com/tx/0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416) |
+| 4 | **Manual Release & Payout** | `0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2` | `MAJORITY_AGREE` | Status: `RELEASED` (Disbursed to Freelancer) | [Inspect](https://studio-dev.genlayer.com/tx/0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2) |
 
-#### Phase B: Live Adversarial Prompt-Injection Attack & Client Refund Path (Escrow #2)
+#### Phase B: Live Adversarial Prompt-Injection Attack & Auto-Refund Path (Escrow #2)
 | Phase | Action | Transaction Hash | Consensus Verdict | On-Chain State | Explorer Link |
 |:--- |:---|:---|:---|:---|:---|
-| 1 | **Create Escrow (Deposit 1 GEN)** | `0xcf7ca1fb5a201cb497572e6abc57fd26365722706f312ecdc70c4b10844c55f7` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xcf7ca1fb5a201cb497572e6abc57fd26365722706f312ecdc70c4b10844c55f7) |
-| 2 | **Submit Adversarial Exploit Delivery** | `0xb1a780f70182972be2e8c90948a00511af2d64e8d670ec599957e06ef0fa5e75` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://explorer-studio.genlayer.com/tx/0xb1a780f70182972be2e8c90948a00511af2d64e8d670ec599957e06ef0fa5e75) |
-| 3 | **Live AI Jury Adjudication (Injection Neutralized)** | `0xdc86dcee691a02468b2223ff246052bdae4efc4740fc446b214982d1d7bee80d` | `MAJORITY_AGREE` | **Injection Detected!** Score `0/100`, auto-refunded to client (`status: REFUNDED`) | [Inspect](https://explorer-studio.genlayer.com/tx/0xdc86dcee691a02468b2223ff246052bdae4efc4740fc446b214982d1d7bee80d) |
+| 1 | **Create Escrow (Deposit 1 GEN)** | `0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce` | `MAJORITY_AGREE` | Status: `FUNDED` | [Inspect](https://studio-dev.genlayer.com/tx/0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce) |
+| 2 | **Submit Adversarial Delivery** | `0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4` | `MAJORITY_AGREE` | Status: `SUBMITTED` | [Inspect](https://studio-dev.genlayer.com/tx/0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4) |
+| 3 | **AI Jury Adjudication (Equivalence Principle)** | `0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427` | `MAJORITY_AGREE` | **Injection Detected!** Score `0/100`, auto-refunded to client (`status: REFUNDED`) | [Inspect](https://studio-dev.genlayer.com/tx/0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427) |
 
 ---
 
