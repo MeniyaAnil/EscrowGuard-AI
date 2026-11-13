@@ -3,7 +3,7 @@
 > **Official Evidence Document for GenLayer Stewards & Points Portal Review**  
 > **Target Track:** Builder · Projects (Points Allocation: 20–4,000 pts)  
 > **Active Canonical Network:** GenLayer Studio Devnet (Chain ID `61997` / `0xf22d`)  
-> **Canonical Contract Address:** [`0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53`](https://studio-dev.genlayer.com/address/0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53)  
+> **Canonical Contract Address:** [`0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53`](https://explorer-studio-dev.genlayer.com/address/0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53)  
 > **Live DApp:** [https://genhub-ai.vercel.app](https://genhub-ai.vercel.app)  
 > **GitHub Repository:** [https://github.com/MeniyaAnil/EscrowGuard-AI](https://github.com/MeniyaAnil/EscrowGuard-AI)
 
@@ -20,7 +20,7 @@
 - **WebSocket:** `wss://studio-dev.genlayer.com/ws`
 - **Studio / Explorer:** [https://studio-dev.genlayer.com/](https://studio-dev.genlayer.com/)
 - **Canonical Deployed Contract Address:**  
-  [`0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53`](https://studio-dev.genlayer.com/address/0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53)
+  [`0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53`](https://explorer-studio-dev.genlayer.com/address/0xb883d3d292d90891aB0E9f0E5C8ad63DB8388F53)
 - **Deployment Transaction Hash:**  
   `0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140` (Consensus: `MAJORITY_AGREE`, Status `FINALIZED`, Lifecycle: `finalized / accepted`)
 
@@ -34,10 +34,10 @@ Every step of the autonomous milestone escrow lifecycle has been executed and fi
 
 | # | Lifecycle Step | Function Name | Transaction Hash | Consensus Result | On-Chain State | Explorer Link |
 |---|----------------|---------------|------------------|------------------|----------------|---------------|
-| 1 | **Contract Deployment** | `deployContract()` | `0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140` | `MAJORITY_AGREE` | Contract Initialized (`count = 0`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140) |
-| 2 | **Escrow Creation & Deposit** | `create_escrow` | `0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb) |
-| 3 | **Deliverable Submission** | `submit_delivery` | `0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416` | `MAJORITY_AGREE` | Stored live web proof URL (`status: SUBMITTED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416) |
-| 4 | **Manual Release & Payout** | `manual_release` | `0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2` | `MAJORITY_AGREE` | Released `1.0 GEN` to freelancer (`status: RELEASED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2) |
+| 1 | **Contract Deployment** | `deployContract()` | `0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140` | `MAJORITY_AGREE` | Contract Initialized (`count = 0`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0xc6a99eb1d264ea1aecaac2d1f74bdac040e8d0591ac827e233f144a50ea3c140) |
+| 2 | **Escrow Creation & Deposit** | `create_escrow` | `0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0xbbc70aba6152012a81146e0e3247d054eaa4a550c8c012bc362873c98032ddcb) |
+| 3 | **Deliverable Submission** | `submit_delivery` | `0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416` | `MAJORITY_AGREE` | Stored live web proof URL (`status: SUBMITTED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0x6ebe686abd15608a495f77f4aa4c64713e910ff020b8ac608cc2f910738c3416) |
+| 4 | **Manual Release & Payout** | `manual_release` | `0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2` | `MAJORITY_AGREE` | Released `1.0 GEN` to freelancer (`status: RELEASED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0x067a5df8c84ea21d72c295aade385758ef2fe6b3ddcb35baa49eb37fccbdd0b2) |
 
 ---
 
@@ -51,9 +51,9 @@ Demonstrates live adversarial verification where untrusted evidence explicitly a
 
 | # | Lifecycle Step | Function Name | Transaction Hash | Consensus Result | On-Chain State | Explorer Link |
 |---|----------------|---------------|------------------|------------------|----------------|---------------|
-| 1 | **Escrow Creation (Deposit 1 GEN)** | `create_escrow` | `0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce) |
-| 2 | **Adversarial Delivery Submission** | `submit_delivery` | `0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4` | `MAJORITY_AGREE` | Stored exploit delivery URL (`status: SUBMITTED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4) |
-| 3 | **AI Jury Adjudication (Equivalence Principle)** | `adjudicate_escrow` | `0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427` | `MAJORITY_AGREE` | **Injection Detected!** Score `0/100`, auto-refunded `1.0 GEN` to client (`status: REFUNDED`) | [View on Studio-dev](https://studio-dev.genlayer.com/tx/0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427) |
+| 1 | **Escrow Creation (Deposit 1 GEN)** | `create_escrow` | `0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce` | `MAJORITY_AGREE` | Locked `1.0 GEN` deposit (`status: FUNDED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0x1abb4c8eadac0c947a99528d5e8bf474d977b5613f0108abf0dd31c25f78a4ce) |
+| 2 | **Adversarial Delivery Submission** | `submit_delivery` | `0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4` | `MAJORITY_AGREE` | Stored exploit delivery URL (`status: SUBMITTED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0x4b05602f531934c4ef71b8312135f210da7a384b130af8b3109948e3cf4362f4) |
+| 3 | **AI Jury Adjudication (Equivalence Principle)** | `adjudicate_escrow` | `0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427` | `MAJORITY_AGREE` | **Injection Detected!** Score `0/100`, auto-refunded `1.0 GEN` to client (`status: REFUNDED`) | [View on Studio-dev](https://explorer-studio-dev.genlayer.com/tx/0xb1e04f83b99890229f3bfe8828b4481c7934c86fc0bfc3aabc80e4dfde7aa427) |
 
 ---
 
